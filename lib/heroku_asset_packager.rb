@@ -36,10 +36,6 @@ class HerokuAssetPackager
     file_name = @@regex_pattern.match(@env['REQUEST_PATH'])[1]
     file = "#{heroku_file_location}/#{file_name}_packaged.js"
 
-    puts file_name
-    puts file
-    puts '*****************************************(render_js)'
-
     [
      200,
      {
@@ -54,10 +50,6 @@ class HerokuAssetPackager
   def render_css
     file_name = @@regex_pattern.match(@env['REQUEST_PATH'])[1]
     file = "#{heroku_file_location}/#{file_name}_packaged.css"
-
-    puts file_name
-    puts file
-    puts '*****************************************(render_css)'
 
     [
      200,
