@@ -23,6 +23,8 @@ class HerokuAssetPackager
   def call(env)
     @env = env
     if ENV["HEROKU"]
+      puts '*****************************************'
+      puts env['REQUEST_PATH']
       return render_css if env['REQUEST_PATH'] =~ /\/stylesheets\/.*_packaged.css/i
       return render_js if env['REQUEST_PATH'] =~ /\/javascripts\/.*_packaged.js/i
     end
@@ -31,32 +33,41 @@ class HerokuAssetPackager
   end
 
   def render_js
-        file_name = @@regex_pattern.match(@env['REQUEST_PATH'])[1]
+    file_name = @@regex_pattern.match(@env['REQUEST_PATH'])[1]
+    file = "#{heroku_file_location}/#{file_name}_packaged.js"
 
-        file = "#{heroku_file_location}/#{file_name}_packaged.js"
-        [
-    			200,
-    			{
-    				'Cache-Control'  => 'public, max-age=86400',
-    				'Content-Length' => File.size(file).to_s,
-    				'Content-Type'   => 'text/javascript'
-    			},
-    			File.read(file)
-    		]
+    puts file_name
+    puts file
+    puts '*****************************************(render_js)'
+
+    [
+     200,
+     {
+       'Cache-Control'  => 'public, max-age=86400',
+       'Content-Length' => File.size(file).to_s,
+       'Content-Type'   => 'text/javascript'
+     },
+     File.read(file)
+    ]
   end
 
   def render_css
     file_name = @@regex_pattern.match(@env['REQUEST_PATH'])[1]
     file = "#{heroku_file_location}/#{file_name}_packaged.css"
-        [
-    			200,
-    			{
-    				'Cache-Control'  => 'public, max-age=86400',
-    				'Content-Length' => File.size(file).to_s,
-    				'Content-Type'   => 'text/css'
-    			},
-    			File.read(file)
-    		]
+
+    puts file_name
+    puts file
+    puts '*****************************************(render_css)'
+
+    [
+     200,
+     {
+       'Cache-Control'  => 'public, max-age=86400',
+       'Content-Length' => File.size(file).to_s,
+       'Content-Type'   => 'text/css'
+     },
+     File.read(file)
+    ]
   end
 
   def heroku_file_location
